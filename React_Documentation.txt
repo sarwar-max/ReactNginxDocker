@@ -1,0 +1,19 @@
+Dockerized a React app & deploy it on AWS
+
+1) Firstly, We need to Dockerize React app.(VS Code)
+   docker build -t app .
+   docker run -p 80:80 app
+
+2) Then we need to build the container image and push it to ECR.(VS Code)
+   (i)aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 992215851333.dkr.ecr.us-east-2.amazonaws.com
+   (ii)docker build -t app-098 .
+   (iii)docker tag app-098:latest 992215851333.dkr.ecr.us-east-2.amazonaws.com/app-098:latest
+   (iv)docker push 992215851333.dkr.ecr.us-east-2.amazonaws.com/app-098:latest
+
+3) IAM Roles 
+   we have to create a IAM Roles
+
+4) After that we need to create an ECS Cluster.
+   (i) Task Defination
+   (ii) Services
+   (iii)Load balancers
