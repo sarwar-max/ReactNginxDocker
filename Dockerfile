@@ -1,18 +1,14 @@
+# Stage 1: Build stage
 FROM node:lts-alpine as build
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 3000
-CMD [ "node", "index.js" ]
+RUN npm run build
 
-
+# Stage 2: Production stage
 FROM nginx
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf 
-
-COPY --from=build /app/build /usr/share/nginx/html 
-
-
-
-
-
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
