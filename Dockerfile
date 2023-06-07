@@ -1,15 +1,19 @@
 FROM node:lts-alpine as build
+
+# Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
+
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
 COPY package*.json ./
+
 RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
+
+# Bundle app source
 COPY . .
-RUN npm run build
+
 EXPOSE 3000
 CMD [ "node", "index.js" ]
-
-
-
-FROM nginx
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf 
-
-COPY --from=build /app/build /usr/share/nginx/html 
